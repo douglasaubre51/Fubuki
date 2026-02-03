@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Fubuki.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dtos="clr-namespace:Fubuki.Dtos"
+    xmlns:viewmodels="clr-namespace:Fubuki.ViewModels"
+    x:DataType="viewmodels:MainPageViewModel">
+    <ScrollView>
+        <Grid
+            Margin="20,20"
+            RowDefinitions="Auto,Auto,*"
+            RowSpacing="8">
+            <Label
+                Grid.Row="0"
+                FontSize="48"
+                HorizontalOptions="Start"
+                SemanticProperties.HeadingLevel="Level1"
+                Style="{StaticResource Headline}"
+                Text="Fubuki" />
+
+            <Label
+                Grid.Row="1"
+                HorizontalOptions="Start"
+                Style="{StaticResource SubHeadline}"
+                Text="Services" />
+
+            <CollectionView Grid.Row="2" ItemsSource="{Binding ServiceCardCollection}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dtos:RenderDtos">
+                        <Border
+                            Padding="10"
+                            BackgroundColor="GhostWhite"
+                            StrokeShape="RoundRectangle 8">
+                            <Grid RowDefinitions="*,*,*">
+                                <Label
+                                    Grid.Row="0"
+                                    FontSize="Body"
+                                    Text="{Binding Service.Name}" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    FontSize="Caption"
+                                    Text="{Binding Service.Id}" />
+                                <Label
+                                    Grid.Row="1"
+                                    FontSize="Caption"
+                                    Text="{Binding ServiceDetails.Url}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="4" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+        </Grid>
+    </ScrollView>
+</ContentPage>

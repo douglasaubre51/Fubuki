@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fubuki", "Fubuki\Fubuki\Fubuki.csproj", "{1CF7D7AC-8B95-4960-BB74-C01AE1A55904}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fubuki.Droid", "Fubuki\Fubuki.Droid\Fubuki.Droid.csproj", "{8BF58762-6610-4BFC-8435-598CB35C717F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CF7D7AC-8B95-4960-BB74-C01AE1A55904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF7D7AC-8B95-4960-BB74-C01AE1A55904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF7D7AC-8B95-4960-BB74-C01AE1A55904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF7D7AC-8B95-4960-BB74-C01AE1A55904}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF58762-6610-4BFC-8435-598CB35C717F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF58762-6610-4BFC-8435-598CB35C717F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF58762-6610-4BFC-8435-598CB35C717F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8BF58762-6610-4BFC-8435-598CB35C717F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF58762-6610-4BFC-8435-598CB35C717F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF58762-6610-4BFC-8435-598CB35C717F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {425F77F9-E08C-4E3B-89B4-256BFB069ACC}
+	EndGlobalSection
+EndGlobal
