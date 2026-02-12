@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Fubuki.Views.Deploys"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dtos="clr-namespace:Fubuki.Dtos"
+    xmlns:viewmodels="clr-namespace:Fubuki.ViewModels"
+    x:DataType="viewmodels:DeploysViewModel">
+    <RefreshView Command="{Binding RefreshDeployCardCollectionCommand}" IsRefreshing="{Binding IsCollectionRefreshing}">
+        <ScrollView Orientation="Vertical">
+            <VerticalStackLayout Margin="10">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+                <CollectionView ItemSizingStrategy="MeasureFirstItem" ItemsSource="{Binding DeployCardCollection}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dtos:DeployDtos">
+                            <Border Style="{StaticResource LiveCard}">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Text="{Binding Deploy.Status}" />
+                                    <Label FontSize="16" Text="{Binding Deploy.Trigger}" />
+                                    <Label
+                                        FontSize="13"
+                                        LineBreakMode="TailTruncation"
+                                        Text="{Binding Deploy.Commit.Message}" />
+                                    <Label FontSize="10" Text="{Binding Deploy.Id}" />
+                                    <Label FontSize="16" Text="{Binding Deploy.StartedAt, StringFormat='StartTime: {0}'}" />
+                                    <Label FontSize="16" Text="{Binding Deploy.FinishedAt, StringFormat='FinishTime: {0}'}" />
+                                    <Label FontSize="16" Text="{Binding Deploy.UpdatedAt, StringFormat='UpdatedAt: {0}'}" />
+                                </VerticalStackLayout>
+
+                                <Border.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsCanceled}"
+                                        TargetType="Border"
+                                        Value="True">
+                                        <Setter Property="Background" Value="Orange" />
+                                    </DataTrigger>
+
+                                    <DataTrigger
+                                        Binding="{Binding IsDeactivated}"
+                                        TargetType="Border"
+                                        Value="True">
+                                        <Setter Property="Background" Value="LightYellow" />
+                                    </DataTrigger>
+
+                                    <DataTrigger
+                                        Binding="{Binding DidBuildFail}"
+                                        TargetType="Border"
+                                        Value="True">
+                                        <Setter Property="Background" Value="IndianRed" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="4" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

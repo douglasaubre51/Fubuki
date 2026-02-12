@@ -18,6 +18,11 @@ namespace Fubuki
             var context = BindingContext as MainPageViewModel;
             context!.IsPageLoading = true;
         }
+
+        private void Switch_Toggled(object sender, ToggledEventArgs e)
+        {
+            
+        }
     }
 
 }

@@ -4,10 +4,10 @@ namespace Fubuki.Dtos;
 
 public class RenderDtos
 {
-    public ParentServer? ParentServer { get; set; }
     public Service? Service { get; set; }
-    public ServiceDetails? ServiceDetails { get; set; }
-    public RegistryCredential? RegistryCredential { get; set; }
+    public string ServiceCardStatusColor { get; set; } = "Black";
+    public bool IsActive { get; set; } = false;
+    public bool IsNotActive { get; set; } = true;
 }
 
 public class BuildFilter
@@ -64,13 +64,13 @@ public class Root
 public class Service
 {
     [JsonProperty("id")]
-    public string Id { get; set; } =  string.Empty;
+    public string Id { get; set; } = string.Empty;
 
     [JsonProperty("autoDeploy")]
-    public string AutoDeploy { get; set; } =  string.Empty;
+    public string AutoDeploy { get; set; } = string.Empty;
 
     [JsonProperty("branch")]
-    public string Branch { get; set; } =  string.Empty;
+    public string Branch { get; set; } = string.Empty;
 
     [JsonProperty("buildFilter")]
     public BuildFilter? BuildFilter;

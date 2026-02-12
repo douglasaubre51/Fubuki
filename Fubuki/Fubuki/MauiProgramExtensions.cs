@@ -17,13 +17,14 @@ namespace Fubuki
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             // Add Services
             builder.Services.AddTransient<RenderClients>();
 
             builder.Services.AddTransient<MainPageViewModel>();
+            builder.Services.AddTransient<DeploysViewModel>();
 
             return builder;
         }

@@ -1,0 +1,47 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using Fubuki.Dtos;
+using Fubuki.Services.RestServices;
+using MvvmHelpers;
+using System.Diagnostics;
+
+namespace Fubuki.ViewModels;
+
+[QueryProperty(nameof(CurrentService), "SelectedService")]
+public partial class DeploysViewModel(RenderClients renderClient) : BaseViewModel
+{
+    [ObservableProperty]
+    private Service? currentService;
+
+    private readonly RenderClients _renderClients = renderClient;
+
+    [ObservableProperty]
+    private ObservableRangeCollection<DeployDtos> deployCardCollection = [];
+
+    [ObservableProperty]
+    private bool isPageLoading;
+    async partial void OnIsPageLoadingChanged(bool value)
+    {
+        if (value is false) return;
+        try
+        {
+            if (CurrentService is null) return;
+
+            List<DeployDtos> deployDtos = await _renderClients.GetAllDeploys(CurrentService.Id);
+            if (deployDtos is null || deployDtos.Count == 0) return;
+
+            foreach (var deploy in deployDtos)
+            {
+                Console.WriteLine($"deployId: {deploy.Deploys.Id}");
+                Console.WriteLine($"deployStatus: {deploy.Deploys.Status}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+        finally
+        {
+            IsPageLoading = false;
+        }
+    }
+}

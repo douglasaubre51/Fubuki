@@ -6,47 +6,63 @@
     xmlns:dtos="clr-namespace:Fubuki.Dtos"
     xmlns:viewmodels="clr-namespace:Fubuki.ViewModels"
     x:DataType="viewmodels:MainPageViewModel">
-    <ScrollView>
-        <Grid
-            Margin="20,20"
-            RowDefinitions="Auto,Auto,*"
-            RowSpacing="8">
-            <Label
-                Grid.Row="0"
-                FontSize="48"
-                HorizontalOptions="Start"
-                SemanticProperties.HeadingLevel="Level1"
-                Style="{StaticResource Headline}"
-                Text="Fubuki" />
+    <Grid
+        Margin="16,0"
+        RowDefinitions="*"
+        RowSpacing="8">
 
-            <Label
-                Grid.Row="1"
-                HorizontalOptions="Start"
-                Style="{StaticResource SubHeadline}"
-                Text="Services" />
-
-            <CollectionView Grid.Row="2" ItemsSource="{Binding ServiceCardCollection}">
+        <RefreshView
+            Grid.Row="2"
+            Command="{Binding RefreshServiceCardCollectionCommand}"
+            IsRefreshing="{Binding IsCollectionRefreshing}">
+            <CollectionView ItemsSource="{Binding ServiceCardCollection}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="dtos:RenderDtos">
                         <Border
-                            Padding="10"
-                            BackgroundColor="GhostWhite"
+                            Padding="8,4"
+                            BackgroundColor="{Binding ServiceCardStatusColor}"
+                            HeightRequest="120"
+                            Stroke="Transparent"
                             StrokeShape="RoundRectangle 8">
-                            <Grid RowDefinitions="*,*,*">
+                            <Grid RowDefinitions="*,*" RowSpacing="16">
                                 <Label
                                     Grid.Row="0"
-                                    FontSize="Body"
-                                    Text="{Binding Service.Name}" />
+                                    FontSize="24"
+                                    LineBreakMode="TailTruncation"
+                                    Text="{Binding Service.Name}"
+                                    VerticalOptions="Center" />
 
-                                <Label
-                                    Grid.Row="1"
-                                    FontSize="Caption"
-                                    Text="{Binding Service.Id}" />
-                                <Label
-                                    Grid.Row="1"
-                                    FontSize="Caption"
-                                    Text="{Binding ServiceDetails.Url}" />
+                                <HorizontalStackLayout
+                                    Grid.Row="2"
+                                    Margin="0,0,0,0"
+                                    HorizontalOptions="End"
+                                    Spacing="8">
+                                    <Button
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=StartServiceCommand}"
+                                        CommandParameter="{Binding .}"
+                                        ImageSource="ic_fluent_play_24_regular.png"
+                                        IsEnabled="{Binding IsNotActive}"
+                                        Style="{StaticResource ActiveBtn}" />
+
+                                    <Button
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=RestartServiceCommand}"
+                                        CommandParameter="{Binding .}"
+                                        ImageSource="ic_fluent_arrow_counterclockwise_24_regular.png"
+                                        IsEnabled="{Binding IsActive}"
+                                        Style="{StaticResource ActiveBtn}" />
+
+                                    <Button
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=StopServiceCommand}"
+                                        CommandParameter="{Binding .}"
+                                        ImageSource="ic_fluent_stop_24_filled.png"
+                                        IsEnabled="{Binding IsActive}"
+                                        Style="{StaticResource ActiveBtn}" />
+                                </HorizontalStackLayout>
                             </Grid>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=GoToDeploysCommand}" CommandParameter="{Binding Service}" />
+                            </Border.GestureRecognizers>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -55,6 +71,6 @@
                     <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="4" />
                 </CollectionView.ItemsLayout>
             </CollectionView>
-        </Grid>
-    </ScrollView>
+        </RefreshView>
+    </Grid>
 </ContentPage>
