@@ -9,9 +9,31 @@
     <RefreshView Command="{Binding RefreshDeployCardCollectionCommand}" IsRefreshing="{Binding IsCollectionRefreshing}">
         <ScrollView Orientation="Vertical">
             <VerticalStackLayout Margin="10">
+                <Grid>
+                    <Border
+                        Padding="20"
+                        BackgroundColor="DeepPink"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="0">
+                        <Label
+                            FontSize="16"
+                            HorizontalOptions="End"
+                            Text="Swipe right to launch"
+                            TextColor="WhiteSmoke" />
+
+                        <Border.GestureRecognizers>
+                            <SwipeGestureRecognizer Command="{Binding LaunchServiceCommand}" Direction="Right" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+
                 <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 
-                <CollectionView ItemSizingStrategy="MeasureFirstItem" ItemsSource="{Binding DeployCardCollection}">
+
+                <CollectionView
+                    Margin="0,16,0,0"
+                    ItemSizingStrategy="MeasureFirstItem"
+                    ItemsSource="{Binding DeployCardCollection}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="dtos:DeployDtos">
                             <Border Style="{StaticResource LiveCard}">

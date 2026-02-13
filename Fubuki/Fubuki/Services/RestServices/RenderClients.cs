@@ -39,13 +39,24 @@ public class RenderClients
         Console.WriteLine("suspending service: " + serviceId);
     }
 
+    public async Task<List<DeployDtos>?> GetDeploysFromCursorId(string serviceId, string cursorId)
+    {
+        var response = await _client.GetAsync($"{EnvStorage.RenderBaseURL}/services/{serviceId}/deploys?cursor={cursorId}");
+        if (response.IsSuccessStatusCode is false)
+        {
+            Console.WriteLine("GetDeploysFromCursorId error: " + response.StatusCode);
+            return null!;
+        }
+
+        return await response.Content.ReadFromJsonAsync<List<DeployDtos>>();
+    }
+
     public async Task<List<DeployDtos>?> GetAllDeploys(string serviceId)
     {
-        Console.WriteLine("fetching all web services!");
         var response = await _client.GetAsync($"{EnvStorage.RenderBaseURL}/services/{serviceId}/deploys");
         if (response.IsSuccessStatusCode is false)
         {
-            Console.WriteLine("GetAllServices error: " + response.StatusCode);
+            Console.WriteLine("GetAllDeploys error: " + response.StatusCode);
             return null!;
         }
 

@@ -5,6 +5,8 @@ namespace Fubuki.Dtos;
 public class DeployDtos
 {
     public Deploy? Deploy { get; set; }
+    public string Cursor { get; set; } = string.Empty;
+
     public bool DidBuildFail { get; set; }
     public bool IsDeactivated { get; set; }
     public bool IsCanceled { get; set; }

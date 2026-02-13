@@ -25,12 +25,35 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
     private bool isPageLoading;
 
     [RelayCommand]
+    async Task LaunchService()
+    {
+        try
+        {
+            Console.WriteLine("swiper no swiping!!!");
+            Console.WriteLine(CurrentService.ServiceDetails.Url);
+            await Browser.Default.OpenAsync(new Uri(CurrentService!.ServiceDetails!.Url), BrowserLaunchMode.SystemPreferred);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    [RelayCommand]
     async Task RefreshDeployCardCollection()
     {
         try
         {
             IsCollectionRefreshing = true;
-            List<DeployDtos>? deployDtos = await _renderClients.GetAllDeploys(CurrentService!.Id);
+            List<DeployDtos>? deployDtos = [];
+
+            if (DeployCardCollection.Count is not 0)
+                deployDtos = await _renderClients.GetDeploysFromCursorId(
+                CurrentService!.Id,
+                DeployCardCollection.Last().Cursor);
+            else
+                deployDtos = await _renderClients.GetAllDeploys(CurrentService!.Id);
+
             if (deployDtos is null || deployDtos.Count == 0) return;
 
             foreach (var deploy in deployDtos)
@@ -45,7 +68,7 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
                     deploy.DidBuildFail = true;
             }
 
-            DeployCardCollection.ReplaceRange(deployDtos);
+            DeployCardCollection.AddRange(deployDtos);
         }
         catch (Exception ex)
         {
