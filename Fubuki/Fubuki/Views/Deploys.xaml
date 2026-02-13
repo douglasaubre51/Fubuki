@@ -6,84 +6,90 @@
     xmlns:dtos="clr-namespace:Fubuki.Dtos"
     xmlns:viewmodels="clr-namespace:Fubuki.ViewModels"
     x:DataType="viewmodels:DeploysViewModel">
-    <RefreshView Command="{Binding RefreshDeployCardCollectionCommand}" IsRefreshing="{Binding IsCollectionRefreshing}">
-        <ScrollView Orientation="Vertical">
-            <VerticalStackLayout Margin="10">
-                <Grid>
-                    <Border
-                        Padding="20"
-                        BackgroundColor="DeepPink"
-                        StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0">
-                        <Label
-                            FontSize="16"
-                            HorizontalOptions="End"
-                            Text="Swipe right to launch"
-                            TextColor="WhiteSmoke" />
+    <RefreshView Command="{x:Binding RefreshDeployCardCollectionCommand}" IsRefreshing="{x:Binding IsCollectionRefreshing}">
+        <Grid Margin="10" RowDefinitions="Auto,Auto,*">
+            <Border
+                Grid.Row="0"
+                Padding="20"
+                BackgroundColor="DeepPink"
+                StrokeShape="RoundRectangle 8"
+                StrokeThickness="0">
+                <Label
+                    FontSize="16"
+                    HorizontalOptions="End"
+                    Text="Swipe right to launch"
+                    TextColor="WhiteSmoke" />
 
-                        <Border.GestureRecognizers>
-                            <SwipeGestureRecognizer Command="{Binding LaunchServiceCommand}" Direction="Right" />
-                        </Border.GestureRecognizers>
-                    </Border>
-                </Grid>
+                <Border.GestureRecognizers>
+                    <SwipeGestureRecognizer Command="{x:Binding LaunchServiceCommand}" Direction="Right" />
+                </Border.GestureRecognizers>
+            </Border>
 
-                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <ActivityIndicator
+                Grid.Row="1"
+                IsRunning="{x:Binding IsBusy}"
+                IsVisible="{x:Binding IsBusy}" />
 
 
-                <CollectionView
-                    Margin="0,16,0,0"
-                    ItemSizingStrategy="MeasureFirstItem"
-                    ItemsSource="{Binding DeployCardCollection}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="dtos:DeployDtos">
-                            <Border Style="{StaticResource LiveCard}">
-                                <VerticalStackLayout Spacing="4">
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="20"
-                                        Text="{Binding Deploy.Status}" />
-                                    <Label FontSize="16" Text="{Binding Deploy.Trigger}" />
-                                    <Label
-                                        FontSize="13"
-                                        LineBreakMode="TailTruncation"
-                                        Text="{Binding Deploy.Commit.Message}" />
-                                    <Label FontSize="10" Text="{Binding Deploy.Id}" />
-                                    <Label FontSize="16" Text="{Binding Deploy.StartedAt, StringFormat='StartTime: {0}'}" />
-                                    <Label FontSize="16" Text="{Binding Deploy.FinishedAt, StringFormat='FinishTime: {0}'}" />
-                                    <Label FontSize="16" Text="{Binding Deploy.UpdatedAt, StringFormat='UpdatedAt: {0}'}" />
-                                </VerticalStackLayout>
+            <CollectionView
+                Grid.Row="2"
+                Margin="0,16,0,0"
+                ItemSizingStrategy="MeasureFirstItem"
+                ItemsSource="{x:Binding DeployCardCollection}"
+                ItemsUpdatingScrollMode="KeepScrollOffset"
+                RemainingItemsThreshold="6"
+                RemainingItemsThresholdReachedCommand="{x:Binding GetMoreDeploysCommand}"
+                VerticalOptions="Fill"
+                VerticalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dtos:DeployDtos">
+                        <Border Style="{x:StaticResource LiveCard}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    Text="{x:Binding Deploy.Status}" />
+                                <Label FontSize="16" Text="{x:Binding Deploy.Trigger}" />
+                                <Label
+                                    FontSize="13"
+                                    LineBreakMode="TailTruncation"
+                                    Text="{x:Binding Deploy.Commit.Message}" />
+                                <Label FontSize="10" Text="{x:Binding Deploy.Id}" />
+                                <Label FontSize="16" Text="{x:Binding Deploy.StartedAt, StringFormat='StartTime: {0}'}" />
+                                <Label FontSize="16" Text="{x:Binding Deploy.FinishedAt, StringFormat='FinishTime: {0}'}" />
+                                <Label FontSize="16" Text="{x:Binding Deploy.UpdatedAt, StringFormat='UpdatedAt: {0}'}" />
+                            </VerticalStackLayout>
 
-                                <Border.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding IsCanceled}"
-                                        TargetType="Border"
-                                        Value="True">
-                                        <Setter Property="Background" Value="Orange" />
-                                    </DataTrigger>
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{x:Binding IsCanceled}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Background" Value="Orange" />
+                                </DataTrigger>
 
-                                    <DataTrigger
-                                        Binding="{Binding IsDeactivated}"
-                                        TargetType="Border"
-                                        Value="True">
-                                        <Setter Property="Background" Value="LightYellow" />
-                                    </DataTrigger>
+                                <DataTrigger
+                                    Binding="{x:Binding IsDeactivated}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Background" Value="LightYellow" />
+                                </DataTrigger>
 
-                                    <DataTrigger
-                                        Binding="{Binding DidBuildFail}"
-                                        TargetType="Border"
-                                        Value="True">
-                                        <Setter Property="Background" Value="IndianRed" />
-                                    </DataTrigger>
-                                </Border.Triggers>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                                <DataTrigger
+                                    Binding="{x:Binding DidBuildFail}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Background" Value="IndianRed" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout ItemSpacing="4" Orientation="Vertical" />
-                    </CollectionView.ItemsLayout>
-                </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="4" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+        </Grid>
     </RefreshView>
 </ContentPage>

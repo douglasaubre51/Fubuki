@@ -16,6 +16,9 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
     [ObservableProperty]
     private bool isCollectionRefreshing;
 
+    [ObservableProperty]
+    private bool didInfiniteScrollRequested;
+
     private readonly RenderClients _renderClients = renderClient;
 
     [ObservableProperty]
@@ -40,19 +43,18 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
     }
 
     [RelayCommand]
-    async Task RefreshDeployCardCollection()
+    async Task GetMoreDeploys()
     {
+        if (IsCollectionRefreshing is true) return;
+        if (DidInfiniteScrollRequested is true) return;
         try
         {
-            IsCollectionRefreshing = true;
-            List<DeployDtos>? deployDtos = [];
+            DidInfiniteScrollRequested = true;
+            Console.WriteLine("Infinite scroll requested!");
 
-            if (DeployCardCollection.Count is not 0)
-                deployDtos = await _renderClients.GetDeploysFromCursorId(
+            List<DeployDtos>? deployDtos = await _renderClients.GetDeploysFromCursorId(
                 CurrentService!.Id,
                 DeployCardCollection.Last().Cursor);
-            else
-                deployDtos = await _renderClients.GetAllDeploys(CurrentService!.Id);
 
             if (deployDtos is null || deployDtos.Count == 0) return;
 
@@ -69,6 +71,47 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
             }
 
             DeployCardCollection.AddRange(deployDtos);
+            Console.WriteLine($"Deploy card collection: {DeployCardCollection.Count}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+        finally
+        {
+            DidInfiniteScrollRequested = false;
+        }
+    }
+
+    [RelayCommand]
+    async Task RefreshDeployCardCollection()
+    {
+        try
+        {
+            IsCollectionRefreshing = true;
+            List<DeployDtos>? deployDtos = [];
+
+            deployDtos = await _renderClients.GetAllDeploys(CurrentService!.Id);
+
+            Console.WriteLine($"refresh data count: {deployDtos!.Count}");
+            Console.WriteLine($"Deploy card collection: {DeployCardCollection.Count}");
+
+            if (deployDtos is null || deployDtos.Count == 0) return;
+
+            foreach (var deploy in deployDtos)
+            {
+                if (deploy.Deploy!.Status == "canceled")
+                    deploy.IsCanceled = true;
+
+                if (deploy.Deploy.Status == "deactivated")
+                    deploy.IsDeactivated = true;
+
+                if (deploy.Deploy.Status == "build_failed")
+                    deploy.DidBuildFail = true;
+            }
+
+            DeployCardCollection.Clear();
+            DeployCardCollection.AddRange(deployDtos);
         }
         catch (Exception ex)
         {
@@ -84,9 +127,7 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
         if (value is false) return;
         try
         {
-            IsBusy = true;
-
-            if (deployCardCollection.Count is not 0) return;
+            IsCollectionRefreshing = true;
 
             List<DeployDtos>? deployDtos = await _renderClients.GetAllDeploys(CurrentService!.Id);
             if (deployDtos is null || deployDtos.Count == 0) return;
@@ -103,7 +144,8 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
                     deploy.DidBuildFail = true;
             }
 
-            DeployCardCollection.ReplaceRange(deployDtos);
+            DeployCardCollection.AddRange(deployDtos);
+            Console.WriteLine($"Deploy card collection: {DeployCardCollection.Count}");
         }
         catch (Exception ex)
         {
@@ -111,7 +153,7 @@ public partial class DeploysViewModel(RenderClients renderClient) : BaseViewMode
         }
         finally
         {
-            IsBusy = false;
+            IsCollectionRefreshing = false;
             IsPageLoading = false;
         }
     }

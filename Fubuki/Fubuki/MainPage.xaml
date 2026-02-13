@@ -10,17 +10,16 @@
         Margin="16,0"
         RowDefinitions="*"
         RowSpacing="8">
-
         <RefreshView
             Grid.Row="2"
-            Command="{Binding RefreshServiceCardCollectionCommand}"
-            IsRefreshing="{Binding IsCollectionRefreshing}">
-            <CollectionView ItemsSource="{Binding ServiceCardCollection}">
+            Command="{x:Binding RefreshServiceCardCollectionCommand}"
+            IsRefreshing="{x:Binding IsCollectionRefreshing}">
+            <CollectionView ItemsSource="{x:Binding ServiceCardCollection}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="dtos:RenderDtos">
                         <Border
                             Padding="8,4"
-                            BackgroundColor="{Binding ServiceCardStatusColor}"
+                            BackgroundColor="{x:Binding ServiceCardStatusColor}"
                             HeightRequest="120"
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 8">
@@ -29,7 +28,7 @@
                                     Grid.Row="0"
                                     FontSize="24"
                                     LineBreakMode="TailTruncation"
-                                    Text="{Binding Service.Name}"
+                                    Text="{x:Binding Service.Name}"
                                     VerticalOptions="Center" />
 
                                 <HorizontalStackLayout
@@ -38,30 +37,36 @@
                                     HorizontalOptions="End"
                                     Spacing="8">
                                     <Button
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=StartServiceCommand}"
-                                        CommandParameter="{Binding .}"
+                                        Command="{x:Binding Source={x:RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}},
+                                                            x:DataType=viewmodels:MainPageViewModel,
+                                                            Path=StartServiceCommand}"
+                                        CommandParameter="{x:Binding .}"
                                         ImageSource="ic_fluent_play_24_regular.png"
-                                        IsEnabled="{Binding IsNotActive}"
-                                        Style="{StaticResource ActiveBtn}" />
+                                        IsEnabled="{x:Binding IsNotActive}"
+                                        Style="{x:StaticResource ActiveBtn}" />
 
                                     <Button
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=RestartServiceCommand}"
-                                        CommandParameter="{Binding .}"
+                                        Command="{x:Binding Source={x:RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}},
+                                                            x:DataType=viewmodels:MainPageViewModel,
+                                                            Path=RestartServiceCommand}"
+                                        CommandParameter="{x:Binding .}"
                                         ImageSource="ic_fluent_arrow_counterclockwise_24_regular.png"
-                                        IsEnabled="{Binding IsActive}"
-                                        Style="{StaticResource ActiveBtn}" />
+                                        IsEnabled="{x:Binding IsActive}"
+                                        Style="{x:StaticResource ActiveBtn}" />
 
                                     <Button
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=StopServiceCommand}"
-                                        CommandParameter="{Binding .}"
+                                        Command="{x:Binding Source={x:RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}},
+                                                            x:DataType=viewmodels:MainPageViewModel,
+                                                            Path=StopServiceCommand}"
+                                        CommandParameter="{x:Binding .}"
                                         ImageSource="ic_fluent_stop_24_filled.png"
-                                        IsEnabled="{Binding IsActive}"
-                                        Style="{StaticResource ActiveBtn}" />
+                                        IsEnabled="{x:Binding IsActive}"
+                                        Style="{x:StaticResource ActiveBtn}" />
                                 </HorizontalStackLayout>
                             </Grid>
 
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=GoToDeploysCommand}" CommandParameter="{Binding Service}" />
+                                <TapGestureRecognizer Command="{x:Binding Source={x:RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, x:DataType=viewmodels:MainPageViewModel, Path=GoToDeploysCommand}" CommandParameter="{Binding Service}" />
                             </Border.GestureRecognizers>
                         </Border>
                     </DataTemplate>

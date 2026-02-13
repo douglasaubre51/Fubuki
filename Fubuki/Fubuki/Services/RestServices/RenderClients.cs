@@ -39,9 +39,10 @@ public class RenderClients
         Console.WriteLine("suspending service: " + serviceId);
     }
 
+    // paginated client
     public async Task<List<DeployDtos>?> GetDeploysFromCursorId(string serviceId, string cursorId)
     {
-        var response = await _client.GetAsync($"{EnvStorage.RenderBaseURL}/services/{serviceId}/deploys?cursor={cursorId}");
+        var response = await _client.GetAsync($"{EnvStorage.RenderBaseURL}/services/{serviceId}/deploys?cursor={cursorId}&limit=8");
         if (response.IsSuccessStatusCode is false)
         {
             Console.WriteLine("GetDeploysFromCursorId error: " + response.StatusCode);
@@ -53,7 +54,7 @@ public class RenderClients
 
     public async Task<List<DeployDtos>?> GetAllDeploys(string serviceId)
     {
-        var response = await _client.GetAsync($"{EnvStorage.RenderBaseURL}/services/{serviceId}/deploys");
+        var response = await _client.GetAsync($"{EnvStorage.RenderBaseURL}/services/{serviceId}/deploys?limit=8");
         if (response.IsSuccessStatusCode is false)
         {
             Console.WriteLine("GetAllDeploys error: " + response.StatusCode);
